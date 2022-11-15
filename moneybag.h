@@ -6,10 +6,13 @@
 class Moneybag
 {
 public:
-    Moneybag() = delete;
-
     using coin_number_t = uint_least64_t;
 
+    Moneybag() = delete;
+
+    coin_number_t livre_number() const;
+    coin_number_t solidus_number() const;
+    coin_number_t denier_number() const;
 private:
 };
 
