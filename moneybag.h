@@ -15,7 +15,17 @@ private:
 class Value
 {
 public:
+    Value() = delete;
+    ~Value() = default;
+    explicit Value(Moneybag::coin_number_t const&);
+    explicit Value(Value const&) = default;
+    explicit Value(Value&&) = default;
+
+    Value& operator= (Value const&) = default;
+    Value& operator= (Value&&) = default;
+
 private:
+    Moneybag::coin_number_t value;
 };
 
 //constexpr Moneybag Livre = Moneybag(1, 0, 0);
