@@ -63,8 +63,8 @@ public:
     constexpr explicit Value(const Value&) = default;
     constexpr explicit Value(Value&&) = default;
 
-    Value& operator= (const Value&) = default;
-    Value& operator= (Value&&) = default;
+    constexpr Value& operator= (const Value&) = default;
+    constexpr Value& operator= (Value&&) = default;
 
     auto operator<=>(const Value&) const = default;
     constexpr auto operator<=>(const Moneybag::coin_number_t& value) const
