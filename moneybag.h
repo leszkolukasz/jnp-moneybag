@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include <string>
 
 class Moneybag
 {
@@ -17,14 +18,29 @@ class Value
 public:
     Value() = delete;
     ~Value() = default;
-    explicit Value(Moneybag::coin_number_t const&);
-    explicit Value(Value const&) = default;
+    explicit Value(const Moneybag::coin_number_t&);
+    explicit Value(const Moneybag&);
+    explicit Value(const Value&) = default;
     explicit Value(Value&&) = default;
 
-    Value& operator= (Value const&) = default;
+    Value& operator= (const Value&) = default;
     Value& operator= (Value&&) = default;
 
+    auto operator<=>(const Value&) const = default;
+
+    explicit operator std::string() const
+    {
+        std::string str = "";
+        str.append("Value( ");
+        str.append(std::to_string(value));
+        str.append(" )");
+        return str;
+    };
+
 private:
+    static constexpr unsigned int solidus_to_denier = 12;
+    static constexpr unsigned int livre_to_denier = 240;
+
     Moneybag::coin_number_t value;
 };
 
