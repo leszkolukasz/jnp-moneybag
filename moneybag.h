@@ -4,6 +4,9 @@
 #include <string>
 #include <stdexcept>
 
+#ifndef MONEYBAG_H
+#define MONEYBAG_H
+
 namespace
 {
     template<class T>
@@ -203,3 +206,5 @@ private:
 constexpr Moneybag Livre = Moneybag(1, 0, 0);
 constexpr Moneybag Solidus = Moneybag(0, 1, 0);
 constexpr Moneybag Denier = Moneybag(0, 0, 1);
+
+#endif /*- MONEYBAG_H -*/
