@@ -25,7 +25,7 @@ namespace
         T tmp;
         if (__builtin_add_overflow(a, b, &tmp))
             throw std::out_of_range("Addition integer overflow");
-        
+
         return tmp;
     }
 
@@ -35,7 +35,7 @@ namespace
         T tmp;
         if (__builtin_mul_overflow(a, b, &tmp))
             throw std::out_of_range("Multiplication integer overflow");
-        
+
         return tmp;
     }
 }
@@ -48,7 +48,7 @@ public:
     constexpr Moneybag() = delete;
     constexpr Moneybag(uint_least64_t livre, uint_least64_t solidus,
                        uint_least64_t denier) : livre(livre), solidus(solidus),
-                       denier(denier) {};
+                                                denier(denier) {};
     constexpr Moneybag(const Moneybag&) = default;
     constexpr ~Moneybag() = default;
 
@@ -109,13 +109,13 @@ public:
 
     constexpr auto operator<=> (const Moneybag& other) const {
         if(livre < other.livre && solidus < other.solidus &&
-            denier < other.denier) {
+           denier < other.denier) {
             return std::partial_ordering::less;
         } else if(livre == other.livre && solidus == other.solidus &&
-                    denier == other.denier) {
+                  denier == other.denier) {
             return std::partial_ordering::equivalent;
         } else if(livre > other.livre && solidus > other.solidus &&
-                    denier > other.denier) {
+                  denier > other.denier) {
             return std::partial_ordering::greater;
         } else {
             return std::partial_ordering::unordered;
@@ -148,17 +148,19 @@ private:
 };
 
 constexpr Moneybag operator* (uint_least64_t multiplier, const Moneybag& x) {
-    return x * multiplier;
+return x * multiplier;
 }
 
 class Value
 {
 public:
-    Value() = delete;
+    Value() {
+        value = 0;
+    }
     ~Value() = default;
 
     constexpr explicit Value(const Moneybag::coin_number_t& value)
-        :value(value)
+            :value(value)
     {}
 
     constexpr explicit Value(const Moneybag& moneybag)
@@ -171,8 +173,8 @@ public:
         value = res;
     }
 
-    constexpr explicit Value(const Value&) = default;
-    constexpr explicit Value(Value&&) = default;
+    constexpr Value(const Value&) = default;
+    constexpr Value(Value&&) = default;
 
     constexpr Value& operator= (const Value&) = default;
     constexpr Value& operator= (Value&&) = default;
@@ -186,14 +188,14 @@ public:
     {
         return this->value == value;
     }
+    constexpr bool operator==(const Value& value) const
+    {
+        return this->value == value.value;
+    }
 
     explicit operator std::string() const
     {
-        std::string str = "";
-        str.append("Value( ");
-        str.append(std::to_string(value));
-        str.append(" )");
-        return str;
+        return std::to_string(value);
     };
 
 private:
