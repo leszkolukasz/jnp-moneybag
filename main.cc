@@ -30,8 +30,8 @@ int main() {
     assert(!(m1 < m2));
     assert(m4 == m3);
 
-    //assert(Moneybag(2, 2, 1) >= Moneybag(2, 1, 1));
-   // assert(Moneybag(2, 2, 1) > Moneybag(2, 1, 1));
+    assert(Moneybag(2, 2, 1) >= Moneybag(2, 1, 1));
+    assert(Moneybag(2, 2, 1) > Moneybag(2, 1, 1));
     assert(!(Moneybag(1, 2, 2) <= Moneybag(2, 2, 1)));
     assert(!(Moneybag(1, 2, 2) < Moneybag(2, 2, 1)));
 

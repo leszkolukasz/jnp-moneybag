@@ -41,8 +41,7 @@ class Moneybag
     using coin_number_t = uint_least64_t;
 
     constexpr Moneybag() = delete;
-    constexpr Moneybag(coin_number_t livre, coin_number_t solidus,
-                       coin_number_t denier)
+    constexpr Moneybag(coin_number_t livre, coin_number_t solidus, coin_number_t denier)
         : livre(livre), solidus(solidus), denier(denier){};
     constexpr Moneybag(const Moneybag &) = default;
     ~Moneybag() = default;
@@ -77,8 +76,7 @@ class Moneybag
 
     constexpr Moneybag &operator-=(const Moneybag &other)
     {
-        if (livre < other.livre || solidus < other.solidus ||
-            denier < other.denier)
+        if (livre < other.livre || solidus < other.solidus || denier < other.denier)
         {
             throw std::out_of_range("Illegal subtraction");
         }
@@ -104,31 +102,21 @@ class Moneybag
 
     constexpr auto operator<=>(const Moneybag &other) const
     {
-        if (livre < other.livre && solidus < other.solidus &&
-            denier < other.denier)
-        {
-            return std::partial_ordering::less;
-        }
-        else if (livre == other.livre && solidus == other.solidus &&
-                 denier == other.denier)
-        {
+        if (livre == other.livre && solidus == other.solidus && denier == other.denier)
             return std::partial_ordering::equivalent;
-        }
-        else if (livre > other.livre && solidus > other.solidus &&
-                 denier > other.denier)
-        {
+
+        else if (livre <= other.livre && solidus <= other.solidus && denier <= other.denier)
+            return std::partial_ordering::less;
+
+        else if (livre >= other.livre && solidus >= other.solidus && denier >= other.denier)
             return std::partial_ordering::greater;
-        }
-        else
-        {
-            return std::partial_ordering::unordered;
-        }
+
+        return std::partial_ordering::unordered;
     }
 
     constexpr bool operator==(const Moneybag &other) const
     {
-        return (livre == other.livre && solidus == other.solidus &&
-                denier == other.denier);
+        return (livre == other.livre && solidus == other.solidus && denier == other.denier);
     }
 
     explicit operator bool() const
@@ -159,15 +147,13 @@ class Moneybag
         return os << "(" + std::to_string(moneybag.livre) +
                          (moneybag.livre == 1 ? " livr, " : " livres, ") +
                          std::to_string(moneybag.solidus) +
-                         (moneybag.solidus == 1 ? " solidus, "
-                                                : " soliduses, ") +
+                         (moneybag.solidus == 1 ? " solidus, " : " soliduses, ") +
                          std::to_string(moneybag.denier) +
                          (moneybag.denier == 1 ? " denier)" : " deniers)");
     }
 };
 
-constexpr const Moneybag operator*(Moneybag::coin_number_t multiplier,
-                                   const Moneybag &moneybag)
+constexpr const Moneybag operator*(Moneybag::coin_number_t multiplier, const Moneybag &moneybag)
 {
     return moneybag * multiplier;
 }
@@ -176,20 +162,18 @@ class Value
 {
   public:
     constexpr Value() : value(0)
-    {}
-    ~Value() = default;
-
+    {
+    }
     constexpr Value(const Moneybag::coin_number_t &value) : value(value)
-    {}
+    {
+    }
 
     constexpr Value(const Moneybag &moneybag)
     {
-        auto mul1 =
-            overflow_mul(moneybag.livre_number(),
-                         static_cast<Moneybag::coin_number_t>(livre_to_denier));
-        auto mul2 = overflow_mul(
-            moneybag.solidus_number(),
-            static_cast<Moneybag::coin_number_t>(solidus_to_denier));
+        auto mul1 = overflow_mul(moneybag.livre_number(),
+                                 static_cast<Moneybag::coin_number_t>(livre_to_denier));
+        auto mul2 = overflow_mul(moneybag.solidus_number(),
+                                 static_cast<Moneybag::coin_number_t>(solidus_to_denier));
         auto add = overflow_add(mul1, mul2);
         auto res = overflow_add(add, moneybag.denier_number());
 
@@ -197,6 +181,7 @@ class Value
     }
 
     constexpr Value(const Value &) = default;
+    ~Value() = default;
 
     constexpr Value &operator=(const Value &) = default;
 
