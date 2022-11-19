@@ -58,6 +58,9 @@ int main() {
     assert(350 < v2);
     assert(0 == Value());
 
+    auto vv = Moneybag(~0, 0, 0);
+    cout << std::string(Value(vv));
+
     // Te konstrukcje nie powinny się kompilować.
     // Livre = Denier;
     //Denier = Solidus;

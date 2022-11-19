@@ -1,6 +1,7 @@
 #ifndef MONEYBAG_H
 #define MONEYBAG_H
 
+#include <algorithm>
 #include <cstdint>
 #include <stdexcept>
 #include <string>
@@ -170,14 +171,14 @@ class Value
 
     constexpr Value(const Moneybag &moneybag)
     {
-        auto mul1 = overflow_mul(moneybag.livre_number(),
-                                 static_cast<Moneybag::coin_number_t>(livre_to_denier));
-        auto mul2 = overflow_mul(moneybag.solidus_number(),
-                                 static_cast<Moneybag::coin_number_t>(solidus_to_denier));
+        auto mul1 = overflow_mul(static_cast<__uint128_t>(moneybag.livre_number()),
+                                 static_cast<__uint128_t>(livre_to_denier));
+        auto mul2 = overflow_mul(static_cast<__uint128_t>(moneybag.solidus_number()),
+                                 static_cast<__uint128_t>(solidus_to_denier));
         auto add = overflow_add(mul1, mul2);
-        auto res = overflow_add(add, moneybag.denier_number());
+        auto result = overflow_add(add, static_cast<__uint128_t>(moneybag.denier_number()));
 
-        value = res;
+        value = result;
     }
 
     constexpr Value(const Value &) = default;
@@ -204,14 +205,27 @@ class Value
 
     explicit operator std::string() const
     {
-        return std::to_string(value);
+        std::string result;
+        auto tmp = value;
+
+        if (tmp == 0)
+            result = "0";
+
+        while (tmp) {
+            result += static_cast<char>(tmp % 10 + static_cast<int>('0'));
+            tmp /= 10;
+        }
+
+        reverse(result.begin(), result.end());
+
+        return result;
     };
 
   private:
     static constexpr unsigned int solidus_to_denier = 12;
     static constexpr unsigned int livre_to_denier = 240;
 
-    Moneybag::coin_number_t value;
+    __uint128_t value;
 };
 
 constexpr Moneybag Livre = Moneybag(1, 0, 0);
